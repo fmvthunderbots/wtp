@@ -69,8 +69,8 @@
 <body>
 
     <script>
-        // WEB APP URL BURAYA
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwId4Riiu4_2lvAUTs6IAUu5VcmBziTaXMWcbfzBaLIVtTuvimlEyZqO7S8dqsCq49n/exec"; 
+        // WEB APP URL
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw--LXD5mFeFecAVbbG_bgDVqHUuoHARsidvDMKE5yczanIcvfCYwbCzvW8D-tZumfF/exec"; 
 
         // YENİ SINAV EKLEMEK İÇİN BU LİSTEYE YENİ BİR BLOK KOPYALA
         const SINAVLAR = [
@@ -159,7 +159,6 @@
             }
         ];
 
-        // TARAYICI ÇEREZ KONTROLÜ (Herkesin 1 kez girmesi için)
         function checkAttempt(testId) {
             if(localStorage.getItem('done_' + testId)) {
                 alert("Bu simülasyona zaten katıldınız. Başka bir simülasyon seçiniz.");
@@ -294,7 +293,7 @@
 
             fetch(APPS_SCRIPT_URL, {
                 method: 'POST', mode: 'no-cors', cache: 'no-cache',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify(payload)
             }).then(() => {
                 localStorage.setItem('done_' + aktifSinav.id, 'true');

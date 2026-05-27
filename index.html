@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THUNDER⚡BOTS - WRO TEST PORTALI</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #eef2f7; 
+            margin: 0; 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            background-image: url('https://i.imgur.com/G1QpCsS.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            background-size: 30%;
+            background-blend-mode: multiply;
+        }
+        .header-logo { max-width: 200px; margin-bottom: 20px; }
+        .menu-screen, .setup-screen, .exam-screen, .success-screen { background-color: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); width: 100%; max-width: 950px; box-sizing: border-box; border-top: 5px solid #F37021; }
+        .hidden { display: none !important; }
+        h2, h3 { color: #0055A5; text-align: center; }
+        
+        /* Menü Butonları */
+        .exam-list { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
+        .exam-btn { background-color: #0055A5; color: white; border: none; padding: 15px 20px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: background 0.2s; text-align: left; display: flex; justify-content: space-between; align-items: center; }
+        .exam-btn:hover { background-color: #004080; }
+        .exam-btn::after { content: '➔'; font-size: 20px; }
+
+        input[type="text"] { width: 100%; padding: 12px; margin: 10px 0 20px 0; border: 2px solid #ccc; border-radius: 6px; font-size: 16px; box-sizing: border-box; }
+        button.action-btn { background-color: #F37021; color: white; border: none; padding: 12px 25px; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
+        button.action-btn:hover { background-color: #d95e19; }
+        button:disabled { background-color: #cccccc; cursor: not-allowed; }
+        .btn-secondary { background-color: #6c757d; }
+        .btn-secondary:hover { background-color: #5a6268; }
+        .layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 25px; margin-top: 20px; }
+        .code-container { border: 2px solid #ced4da; border-radius: 8px; padding: 15px; background: #212529; max-height: 600px; overflow-y: auto; }
+        .code-list { display: flex; flex-direction: column; gap: 5px; }
+        .code-line { padding: 8px 12px; border-radius: 4px; color: white; font-weight: bold; font-size: 13px; cursor: pointer; user-select: none; display: inline-flex; align-items: center; width: fit-content; max-width: 100%; border: 2px solid transparent; transition: transform 0.1s; }
+        .code-line:hover { opacity: 0.9; border-color: #fff; }
+        .code-line.selected-for-active { border: 2px solid #F37021 !important; box-shadow: 0 0 12px rgba(243, 112, 33, 0.6); transform: scale(1.02); background-color: #495057 !important; }
+        
+        .bg-event { background-color: #FF6680; color: #fff; } 
+        .bg-movement { background-color: #D8429B; }
+        .bg-variable { background-color: #FF8C1A; }
+        .bg-myblock { background-color: #FF6680; }
+        .bg-motor { background-color: #4DA6FF; }
+        .bg-control { background-color: #FFB300; }
+        .bg-event-yellow { background-color: #F5C200; color: #000; }
+
+        .input-field { background-color: white; color: black; border-radius: 10px; padding: 1px 6px; margin: 0 4px; font-weight: normal; }
+        .dropdown { background-color: rgba(0,0,0,0.15); color: white; border-radius: 10px; padding: 1px 6px; margin: 0 4px; }
+        .questions-container { display: flex; flex-direction: column; justify-content: space-between; }
+        .question-box { background-color: #f8f9fa; border: 2px solid #e9ecef; padding: 20px; border-radius: 8px; flex-grow: 1; display: flex; flex-direction: column; }
+        .question-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0055A5; padding-bottom: 10px; margin-bottom: 15px; }
+        .question-progress { font-weight: bold; color: #0055A5; }
+        .question-title { font-weight: bold; font-size: 16px; color: #333; margin-bottom: 15px; line-height: 1.4; }
+        .selected-line-display { font-size: 14px; font-weight: bold; margin: 15px 0; padding: 10px; background: #e9ecef; border-left: 4px solid #F37021; border-radius: 4px; color: #495057; min-height: 20px; }
+        textarea { width: 100%; height: 120px; border: 1px solid #ced4da; border-radius: 4px; padding: 10px; font-size: 14px; resize: none; box-sizing: border-box; margin-bottom: 20px; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: auto; }
+        .back-btn { background-color: transparent; color: #0055A5; border: 1px solid #0055A5; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-bottom: 15px; }
+        .back-btn:hover { background-color: #eef2f7; }
+    </style>
+</head>
+<body>
+
+    <script>
+        // WEB APP URL BURAYA
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwId4Riiu4_2lvAUTs6IAUu5VcmBziTaXMWcbfzBaLIVtTuvimlEyZqO7S8dqsCq49n/exec"; 
+
+        // YENİ SINAV EKLEMEK İÇİN BU LİSTEYE YENİ BİR BLOK KOPYALA
+        const SINAVLAR = [
+            {
+                id: "sinav1",
+                baslik: "Simülasyon 1: Görev Başlangıcı",
+                testAdi: "Gorev_1_Sinavi",
+                sorular: [
+                    "Soru 1: Robot başladı ve duvara doğru gidiyor. Hangi satırı düzeltebilirsiniz? Sorun ne olabilir?",
+                    "Soru 2: Robot başladı ve yuva 1 ve 2'deki notaları okumak istiyor. Ancak eğik geldiği için okuyamıyor ve açılarak taramaya devam ediyor. Hangi satırı düzeltmeliyiz?",
+                    "Soru 3: Yeşil notayı alırken üzerine çarpıyor ve almıyor. Hangi satırı düzeltmeliyiz?",
+                    "Soru 4: Yeşil notayı hangi satırda alıyor?",
+                    "Soru 5: Yeşil notayı aldı. Diğer görevlere başlamadan önce geri siyahı görünce duracak ama durmuyor ve duvara doğru geliyor. Sorunu nasıl çözersin? Sorun hangi satırda?"
+                ],
+                kodBloklari: [
+                    { tip: "bg-event-yellow", html: "▶ program başlatıldığında" },
+                    { tip: "bg-movement", html: "Hareket motorlarını <span class='dropdown'>A+E ▼</span> olarak ayarla" },
+                    { tip: "bg-movement", html: "1 motor dönüşünü <span class='input-field'>19.6</span> <span class='dropdown'>cm ▼</span> harekete ayarla" },
+                    { tip: "bg-movement", html: "Hareket motorlarını durduğunda <span class='dropdown'>fren ▼</span> olarak ayarla" },
+                    { tip: "bg-movement", html: "Hareket ivmesini <span class='dropdown'>orta ▼</span> olarak ayarla" },
+                    { tip: "bg-variable", html: "<span class='dropdown'>beyaz ▼</span> i <span class='input-field'>0</span> yap" },
+                    { tip: "bg-variable", html: "<span class='dropdown'>sarı ▼</span> i <span class='input-field'>0</span> yap" },
+                    { tip: "bg-variable", html: "<span class='dropdown'>mavi ▼</span> i <span class='input-field'>0</span> yap" },
+                    { tip: "bg-variable", html: "<span class='dropdown'>siyah ▼</span> i <span class='input-field'>0</span> yap" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>23</span> cm git ve motor hızı <span class='input-field'>-60</span>" },
+                    { tip: "bg-myblock", html: "geri siyah görünce dur" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>7</span> cm git ve motor hızı <span class='input-field'>-50</span>" },
+                    { tip: "bg-control", html: "<span class='input-field'>0.1</span> saniye bekle" },
+                    { tip: "bg-myblock", html: "yavaş <span class='input-field'>-88</span> derece sola dön" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>15</span> cm git ve motor hızı <span class='input-field'>-60</span>" },
+                    { tip: "bg-myblock", html: "geri siyah görünce dur" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>5</span> cm git ve motor hızı <span class='input-field'>60</span>" },
+                    { tip: "bg-myblock", html: "renk kontrol yuva 1" },
+                    { tip: "bg-myblock", html: "yavaş <span class='input-field'>-89</span> derece sola dön" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>10</span> cm git ve motor hızı <span class='input-field'>-60</span>" },
+                    { tip: "bg-myblock", html: "geri siyah görünce dur" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>3</span> cm git ve motor hızı <span class='input-field'>60</span>" },
+                    { tip: "bg-myblock", html: "yavaş <span class='input-field'>0</span> derece sağa dön" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>12</span> cm git ve motor hızı <span class='input-field'>80</span>" },
+                    { tip: "bg-myblock", html: "geri siyah görünce dur" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>-7</span> cm git ve motor hızı <span class='input-field'>60</span>" },
+                    { tip: "bg-motor", html: "C <span class='dropdown'>▼</span> hızı % <span class='input-field'>50</span> olarak ayarla" },
+                    { tip: "bg-motor", html: "C <span class='dropdown'>▼</span> <span class='dropdown'>Sola ▼</span> <span class='input-field'>1</span> <span class='dropdown'>saniye ▼</span> çalıştır" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>9</span> cm git ve motor hızı <span class='input-field'>60</span>" },
+                    { tip: "bg-myblock", html: "geri siyah görünce dur" },
+                    { tip: "bg-myblock", html: "yeşil ile nota dağıtma" },
+                    { tip: "bg-myblock", html: "kırmızı ile nota dağıtma" },
+                    { tip: "bg-myblock", html: "kablo, mikrofon ve müzik aletleri" },
+                    { tip: "bg-event-yellow", html: "durdur <span class='dropdown'>tümünü ▼</span>" }
+                ]
+            },
+            {
+                id: "sinav2",
+                baslik: "Simülasyon 2: Kırmızı Nota",
+                testAdi: "Kirmizi_Nota_Sinavi",
+                sorular: [
+                    "Soru 1: Kırmızı notayı almak için başladı ama 'siyahı görünce dur' için taramaya başladı ama durmadan dümdüz gidiyor. Sorun hangi satırda, ne yaparsın?",
+                    "Soru 2: Yuva 3 ve 4'ü okurken notalara çok eğik yaklaşıyor. Sorun hangi satırda, ne yaparsın?",
+                    "Soru 3: Kırmızıyı alırken kol duvara sıkışıyor ve alamıyor. Sorun hangi satırda, ne yaparsın?",
+                    "Soru 4: Kırmızı notayı almadan önce 'geri beyazı görünce dur' kodunu kaçırıyor. Düzeltmek için hangi satırı düzeltmek gerekir?",
+                    "Soru 5: Bu soruda herhangi bir satır seçmenize gerek yoktur. Robot önce yeşil notayı mı alıyor kırmızı notayı mı? Soldan sağa doğru yuvalara 1, 2, 3 ve 4 dersek yuvaları hangi sırayla okuyor. Açıklayınız."
+                ],
+                kodBloklari: [
+                    { tip: "bg-event", html: "kırmızı nota alma tanımla" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>11</span> cm git ve motor hızı <span class='input-field'>75</span>" },
+                    { tip: "bg-myblock", html: "siyah görünce dur" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>4</span> cm git ve motor hızı <span class='input-field'>-50</span>" },
+                    { tip: "bg-myblock", html: "yavaş <span class='input-field'>-88</span> derece sola dön" },
+                    { tip: "bg-control", html: "<span class='input-field'>0.1</span> saniye bekle" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>11</span> cm git ve motor hızı <span class='input-field'>75</span>" },
+                    { tip: "bg-myblock", html: "siyahı görünce <span class='input-field'>60</span> hızı ile <span class='input-field'>5</span> cm ilerle" },
+                    { tip: "bg-myblock", html: "renk kontrol yuva 4" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>5</span> cm git ve motor hızı <span class='input-field'>60</span>" },
+                    { tip: "bg-myblock", html: "siyahı görünce <span class='input-field'>60</span> hızı ile <span class='input-field'>5</span> cm ilerle" },
+                    { tip: "bg-myblock", html: "renk kontrol yuva 3" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>5</span> cm git ve motor hızı <span class='input-field'>60</span>" },
+                    { tip: "bg-myblock", html: "siyah görünce dur" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>4</span> cm git ve motor hızı <span class='input-field'>60</span>" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>-2</span> derece sağa dön" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>10</span> cm git ve motor hızı <span class='input-field'>75</span>" },
+                    { tip: "bg-myblock", html: "geri beyazı görünce dur" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>9</span> cm git ve motor hızı <span class='input-field'>-75</span>" },
+                    { tip: "bg-motor", html: "C <span class='dropdown'>▼</span> hızı % <span class='input-field'>50</span> olarak ayarla" },
+                    { tip: "bg-motor", html: "C <span class='dropdown'>▼</span> <span class='dropdown'>Sola ▼</span> <span class='input-field'>0.7</span> <span class='dropdown'>saniye ▼</span> çalıştır" }
+                ]
+            }
+        ];
+
+        // TARAYICI ÇEREZ KONTROLÜ (Herkesin 1 kez girmesi için)
+        function checkAttempt(testId) {
+            if(localStorage.getItem('done_' + testId)) {
+                alert("Bu simülasyona zaten katıldınız. Başka bir simülasyon seçiniz.");
+                return false;
+            }
+            return true;
+        }
+
+        let aktifSinav = null;
+        let studentName = "";
+        let currentStep = 1;
+        let totalSteps = 0;
+        let selections = {};
+
+        window.onload = function() {
+            const listContainer = document.getElementById('examListContainer');
+            SINAVLAR.forEach(sinav => {
+                const btn = document.createElement('button');
+                btn.className = 'exam-btn';
+                btn.innerText = sinav.baslik;
+                btn.onclick = () => {
+                    if(checkAttempt(sinav.id)) selectExam(sinav);
+                };
+                listContainer.appendChild(btn);
+            });
+        };
+
+        function showMenu() {
+            document.getElementById('setupScreen').classList.add('hidden');
+            document.getElementById('examScreen').classList.add('hidden');
+            document.getElementById('successScreen').classList.add('hidden');
+            document.getElementById('menuScreen').classList.remove('hidden');
+            document.getElementById('studentName').value = "";
+        }
+
+        function selectExam(sinavObj) {
+            aktifSinav = sinavObj;
+            totalSteps = aktifSinav.sorular.length;
+            selections = {};
+            for(let i = 1; i <= totalSteps; i++) { selections[i] = { lineNum: null, text: "", answer: "" }; }
+            currentStep = 1;
+
+            document.getElementById('testTitleSetup').innerText = aktifSinav.baslik;
+            document.getElementById('menuScreen').classList.add('hidden');
+            document.getElementById('setupScreen').classList.remove('hidden');
+            
+            const codeList = document.getElementById('codeList');
+            codeList.innerHTML = '';
+            aktifSinav.kodBloklari.forEach((blok, index) => {
+                const lineNum = index + 1;
+                const div = document.createElement('div');
+                div.className = `code-line ${blok.tip}`;
+                div.setAttribute('data-line', lineNum);
+                div.innerHTML = blok.html;
+                div.onclick = function() {
+                    selections[currentStep].lineNum = lineNum;
+                    selections[currentStep].text = this.innerText;
+                    updateHighlightDisplay();
+                };
+                codeList.appendChild(div);
+            });
+        }
+
+        function startExam() {
+            const nameInput = document.getElementById('studentName').value.trim();
+            if(!nameInput) { alert("Lütfen adınızı soyadınızı girin."); return; }
+            studentName = nameInput;
+            document.getElementById('setupScreen').classList.add('hidden');
+            document.getElementById('examScreen').classList.remove('hidden');
+            document.getElementById('welcomeText').innerText = "Öğrenci: " + studentName + " | " + aktifSinav.baslik;
+            renderQuestion();
+        }
+
+        function isLineSelectionRequired(stepIndex) {
+            return !aktifSinav.sorular[stepIndex - 1].toLowerCase().includes("satır seçmenize gerek yoktur");
+        }
+
+        function renderQuestion() {
+            document.getElementById('questionProgress').innerText = `Soru ${currentStep} / ${totalSteps}`;
+            document.getElementById('questionText').innerText = aktifSinav.sorular[currentStep - 1];
+            document.getElementById('answerText').value = selections[currentStep].answer;
+            updateHighlightDisplay();
+            document.getElementById('btnPrev').disabled = (currentStep === 1);
+            if(currentStep === totalSteps) { document.getElementById('btnNext').classList.add('hidden'); document.getElementById('btnSubmit').classList.remove('hidden'); }
+            else { document.getElementById('btnNext').classList.remove('hidden'); document.getElementById('btnSubmit').classList.add('hidden'); }
+        }
+
+        function updateHighlightDisplay() {
+            document.querySelectorAll('.code-line').forEach(line => line.classList.remove('selected-for-active'));
+            const activeLineNum = selections[currentStep].lineNum;
+            const displayBox = document.getElementById('selectedLineDisplay');
+            if(!isLineSelectionRequired(currentStep)) {
+                displayBox.innerText = "Bu soru için satır seçimi yapılmasına gerek yoktur.";
+                displayBox.style.borderLeftColor = "#0055A5"; return;
+            }
+            if(activeLineNum) {
+                document.querySelector(`.code-line[data-line="${activeLineNum}"]`).classList.add('selected-for-active');
+                displayBox.innerText = `Seçilen Satır ${activeLineNum}: "${selections[currentStep].text}"`;
+                displayBox.style.borderLeftColor = "#28a745";
+            } else {
+                displayBox.innerText = "Lütfen sol taraftan bir kod satırı seçin.";
+                displayBox.style.borderLeftColor = "#F37021";
+            }
+        }
+
+        function saveCurrentAnswer() { selections[currentStep].answer = document.getElementById('answerText').value; }
+        function nextQuestion() { saveCurrentAnswer(); currentStep++; renderQuestion(); }
+        function prevQuestion() { saveCurrentAnswer(); currentStep--; renderQuestion(); }
+
+        function submitExam() {
+            saveCurrentAnswer();
+            for(let i = 1; i <= totalSteps; i++) {
+                if(isLineSelectionRequired(i) && !selections[i].lineNum) {
+                    alert(`${i}. Soru için kod satırı seçmediniz. Lütfen geri dönüp eksik kısımları tamamlayın.`); currentStep = i; renderQuestion(); return;
+                }
+            }
+            
+            const answersData = {};
+            for(let i = 1; i <= totalSteps; i++) {
+                answersData[i] = { line: isLineSelectionRequired(i) ? `Satır ${selections[i].lineNum}: ${selections[i].text}` : "Seçim Yok", text: selections[i].answer };
+            }
+
+            const payload = {
+                testName: aktifSinav.testAdi,
+                qCount: totalSteps,
+                name: studentName,
+                answers: answersData
+            };
+
+            document.getElementById('btnSubmit').innerText = "Gönderiliyor...";
+            document.getElementById('btnSubmit').disabled = true;
+
+            fetch(APPS_SCRIPT_URL, {
+                method: 'POST', mode: 'no-cors', cache: 'no-cache',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(() => {
+                localStorage.setItem('done_' + aktifSinav.id, 'true');
+                document.getElementById('examScreen').classList.add('hidden');
+                document.getElementById('successScreen').classList.remove('hidden');
+                document.getElementById('btnSubmit').innerText = "Sınavı Bitir";
+                document.getElementById('btnSubmit').disabled = false;
+            }).catch(err => {
+                alert("Veri gönderilirken bir hata oluştu: " + err);
+                document.getElementById('btnSubmit').innerText = "Sınavı Bitir";
+                document.getElementById('btnSubmit').disabled = false;
+            });
+        }
+    </script>
+
+    <div id="menuScreen" class="menu-screen">
+        <div style="text-align: center;">
+            <img src="https://wro-association.org/wp-content/uploads/2021/08/logo-with-wordmark.png" alt="WRO Logo" class="header-logo">
+            <h2>THUNDER⚡BOTS - WRO TEST PORTALI</h2>
+            <p>Bu test portalı WRO turnuvasında yaşanabilecek olası problemleri turnuva öncesinde deneyimleyip çözüm üretmeniz amacıyla oluşturulmuştur. Cevaplarınızı açıklamayı unutmayınız. Başarılar dilerim.</p>
+            <p><b>Lütfen girmek istediğiniz simülasyonu aşağıdan seçiniz:</b></p>
+        </div>
+        <div class="exam-list" id="examListContainer">
+        </div>
+    </div>
+
+    <div id="setupScreen" class="setup-screen hidden" style="text-align: center;">
+        <button class="back-btn" onclick="showMenu()" style="float: left;">⮜ Menüye Dön</button>
+        <div style="clear: both;"></div>
+        <img src="https://wro-association.org/wp-content/uploads/2021/08/logo-with-wordmark.png" alt="WRO Logo" class="header-logo">
+        <h2 id="testTitleSetup">Sınav Adı</h2>
+        <p>Sınava başlamadan önce lütfen adınızı ve soyadınızı giriniz.</p>
+        <div style="text-align: left; max-width: 400px; margin: 0 auto;">
+            <label for="studentName"><b>Ad Soyad:</b></label>
+            <input type="text" id="studentName" placeholder="Örn. Ahmet Yılmaz" required>
+        </div>
+        <button class="action-btn" onclick="startExam()" style="margin-top: 15px;">Sınava Başla</button>
+    </div>
+
+    <div id="examScreen" class="exam-screen hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <img src="https://wro-association.org/wp-content/uploads/2021/08/logo-with-wordmark.png" alt="WRO Logo" style="max-height: 50px;">
+            <h3 id="welcomeText" style="margin: 0;">Öğrenci: </h3>
+        </div>
+        <p style="font-size: 14px; color: #666; border-bottom: 1px solid #ddd; padding-bottom: 10px;">
+            <b>Görev:</b> İlgili hatayı içeren veya düzeltilmesi gereken kod satırını sol taraftaki listeden seçin. Ardından açıklamanızı yazarak ilerleyin.
+        </p>
+        <div class="layout">
+            <div class="code-container">
+                <div class="code-list" id="codeList"></div>
+            </div>
+            <div class="questions-container">
+                <div class="question-box">
+                    <div class="question-header">
+                        <span class="question-progress" id="questionProgress"></span>
+                    </div>
+                    <div class="question-title" id="questionText"></div>
+                    <div class="selected-line-display" id="selectedLineDisplay">Lütfen sol taraftan bir kod satırı seçin.</div>
+                    <textarea id="answerText" placeholder="Sorunun nedenini ve nasıl düzeltileceğini buraya yazın..." oninput="saveCurrentAnswer()"></textarea>
+                    <div class="nav-buttons">
+                        <button id="btnPrev" class="action-btn btn-secondary" onclick="prevQuestion()" disabled>Geri</button>
+                        <button id="btnNext" class="action-btn" onclick="nextQuestion()">İleri</button>
+                        <button id="btnSubmit" class="action-btn hidden" onclick="submitExam()" style="background-color: #28a745;">Sınavı Bitir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="successScreen" class="success-screen hidden" style="text-align: center;">
+        <img src="https://wro-association.org/wp-content/uploads/2021/08/logo-with-wordmark.png" alt="WRO Logo" style="max-height: 80px; margin-bottom: 20px;">
+        <h2>Sınav Tamamlandı!</h2>
+        <p>Cevapların başarıyla kaydedildi ve değerlendirilmek üzere koçuna gönderildi.</p>
+        <button class="action-btn" onclick="showMenu()" style="margin-top: 20px;">Ana Menüye Dön</button>
+    </div>
+</body>
+</html>

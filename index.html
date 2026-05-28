@@ -202,12 +202,17 @@
             },
             {
                 id: "sinav4",
-                baslik: "Simülasyon 4: İkinci Aşama",
+                baslik: "Simülasyon 4: 2. Kablo ve Mikrofon",
                 testAdi: "Dorduncu_Simulasyon",
                 kilitli: true,
                 sifre: "ba1234",
                 sorular: [
-                    "Soru 1: Bu simülasyonun soruları daha sonra eklenecektir. Test etmek için herhangi bir satır seçerek ilerleyebilirsiniz."
+                    "Soru 1: İkinci kabloyu alırken siyahı görünce dur kısmını yapmıyor, taramaya devam edip karşıya (birinci kabloya doğru) gidiyor. Bu sorunu nasıl çözersiniz ve hangi bloğu düzeltmeniz gerekir?",
+                    "Soru 2: İkinci kabloyu aldıktan sonra dönüşünü yapıp mikrofona doğru giderken aşırı yaklaşıyor. Bu sorunu nasıl çözersiniz ve hangi satırı düzelteceksiniz?",
+                    "Soru 3: Robot mikrofona yaklaşıp tamamen kolunu kapatmaya niyetlendiğinde mikrofona çarptığı için görevi tamamlayamıyor. Bu sorunu nasıl çözersiniz ve hangi satırı düzeltmeniz gerekir? Açıklayınız.",
+                    "Soru 4: 2. kabloyu aldı. Mikrofonu almak için gitti. Gerçekten de ağzını açtı ve mikrofonu tam içine oturttu ancak kolu kapattığında tam kavrayamıyor. Hangi satırı düzeltirsiniz? Açıklayınız.",
+                    "Soru 5: 2. kabloyu ve mikrofonu aldı, bırakmak için geri geri yola çıktı. 2. kabloyu ilgili alana düzgün bırakamadı. Çözüm ne veya neler olabilir? Bulduğunuz çözümle ilgili değişmesi gereken satırı işaretleyiniz, farklı bir çözüm düşündüyseniz onu da açıklayarak yazınız.",
+                    "Soru 6: 2. kabloyu bıraktıktan sonra elindeki mikrofonu sarı alana bırakırken mikrofonun ucu dışarıda kalıyor. Bu durumu çözmek için hangi satırı düzeltirdiniz? Bulduğunuz çözüm veya çözümleri açıklayınız. (Sadece bir satır işaretleyiniz ancak aklınızda birden fazla çözüm varsa bunları da açıklamanızda belirtiniz.)"
                 ],
                 kodBloklari: [
                     { tip: "bg-myblock", html: "siyah görünce dur" },
@@ -218,7 +223,7 @@
                     { tip: "bg-myblock", html: "siyah görünce dur" },
                     { tip: "bg-myblock", html: "<span class='input-field'>8.5</span> cm git ve motor hızı <span class='input-field'>-80</span>" },
                     { tip: "bg-motor", html: "C <span class='dropdown'>▼</span> hızı % <span class='input-field'>50</span> olarak ayarla" },
-                    { tip: "bg-motor", html: "C <span class='dropdown'>▼</span> <span class='dropdown'>Sağa ▼</span> <span class='input-field'>0.8</span> <span class='dropdown'>saniye ▼</span> çalıştır <span class='comment'>// 1. Kabloyu aldı</span>" },
+                    { tip: "bg-motor", html: "C <span class='dropdown'>▼</span> <span class='dropdown'>Sağa ▼</span> <span class='input-field'>0.8</span> <span class='dropdown'>saniye ▼</span> çalıştır <span class='comment'>// 2. Kabloyu aldı</span>" },
                     { tip: "bg-myblock", html: "<span class='input-field'>13</span> cm git ve motor hızı <span class='input-field'>75</span>" },
                     { tip: "bg-myblock", html: "<span class='input-field'>-88</span> derece sağa dön" },
                     { tip: "bg-myblock", html: "<span class='input-field'>20</span> cm git ve motor hızı <span class='input-field'>75</span>" },
@@ -237,7 +242,7 @@
                     { tip: "bg-myblock", html: "<span class='input-field'>-100</span> derece sola dön" },
                     { tip: "bg-myblock", html: "<span class='input-field'>2</span> cm git ve motor hızı <span class='input-field'>75</span>" },
                     { tip: "bg-motor", html: "C <span class='dropdown'>▼</span> hızı % <span class='input-field'>50</span> olarak ayarla" },
-                    { tip: "bg-motor", html: "C <span class='dropdown'>▼</span> <span class='dropdown'>Sola ▼</span> <span class='input-field'>0.8</span> <span class='dropdown'>saniye ▼</span> çalıştır <span class='comment'>// 1. Kabloyu bıraktı</span>" },
+                    { tip: "bg-motor", html: "C <span class='dropdown'>▼</span> <span class='dropdown'>Sola ▼</span> <span class='input-field'>0.8</span> <span class='dropdown'>saniye ▼</span> çalıştır <span class='comment'>// 2. Kabloyu bıraktı</span>" },
                     { tip: "bg-myblock", html: "<span class='input-field'>12</span> cm git ve motor hızı <span class='input-field'>-75</span>" },
                     { tip: "bg-myblock", html: "<span class='input-field'>-172</span> derece sola dön" },
                     { tip: "bg-myblock", html: "sapma açısını <span class='input-field'>0</span>'a ayarla" },
@@ -273,7 +278,7 @@
                 
                 let btnHtml = `<div class="title-row"><span>${sinav.baslik}</span></div>`;
                 if(sinav.kilitli) {
-                    btnHtml += `<div class="lock-note">🔒 Perşembe günü 3 ve 4 simülasyon açılacaktır.</div>`;
+                    btnHtml += `<div class="lock-note">🔒 Cuma günü 3 ve 4. simülasyonlar açılacaktır.</div>`;
                 }
                 btn.innerHTML = btnHtml;
 

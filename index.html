@@ -26,9 +26,11 @@
         h2, h3 { color: #0055A5; text-align: center; }
         
         .exam-list { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
-        .exam-btn { background-color: #0055A5; color: white; border: none; padding: 15px 20px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: background 0.2s; text-align: left; display: flex; justify-content: space-between; align-items: center; }
+        .exam-btn { background-color: #0055A5; color: white; border: none; padding: 15px 20px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: background 0.2s; text-align: left; display: flex; flex-direction: column; justify-content: center; }
         .exam-btn:hover { background-color: #004080; }
-        .exam-btn::after { content: '➔'; font-size: 20px; }
+        .exam-btn .title-row { display: flex; justify-content: space-between; width: 100%; align-items: center; }
+        .exam-btn .title-row::after { content: '➔'; font-size: 20px; }
+        .exam-btn .lock-note { font-size: 13px; color: #ffeb3b; margin-top: 5px; font-weight: normal; }
 
         input[type="text"] { width: 100%; padding: 12px; margin: 10px 0 20px 0; border: 2px solid #ccc; border-radius: 6px; font-size: 16px; box-sizing: border-box; }
         button.action-btn { background-color: #F37021; color: white; border: none; padding: 12px 25px; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
@@ -76,6 +78,7 @@
                 id: "sinav1",
                 baslik: "Simülasyon 1: Görev Başlangıcı",
                 testAdi: "Gorev_1_Sinavi",
+                kilitli: false,
                 sorular: [
                     "Soru 1: Robot başladı ve duvara doğru gidiyor. Hangi satırı düzeltebilirsiniz? Sorun ne olabilir?",
                     "Soru 2: Robot başladı ve yuva 1 ve 2'deki notaları okumak istiyor. Ancak eğik geldiği için okuyamıyor ve açılarak taramaya devam ediyor. Hangi satırı düzeltmeliyiz?",
@@ -124,6 +127,7 @@
                 id: "sinav2",
                 baslik: "Simülasyon 2: Kırmızı Nota",
                 testAdi: "Kirmizi_Nota_Sinavi",
+                kilitli: false,
                 sorular: [
                     "Soru 1: Kırmızı notayı almak için başladı ama 'siyahı görünce dur' için taramaya başladı ama durmadan dümdüz gidiyor. Sorun hangi satırda, ne yaparsın?",
                     "Soru 2: Yuva 3 ve 4'ü okurken notalara çok eğik yaklaşıyor. Sorun hangi satırda, ne yaparsın?",
@@ -159,11 +163,51 @@
                 id: "sinav3",
                 baslik: "Simülasyon 3: 1. Kablo",
                 testAdi: "Birinci_Kablo_Sinavi",
+                kilitli: true,
+                sifre: "ba1234",
                 sorular: [
                     "Soru 1: 1. kabloya robot almak için yaklaştı. Kolunu kapattığında ıskalıyor. Kod bloğunda nereye düzeltirsiniz açıklayınız.",
                     "Soru 2: 1. kabloyu aldı yerine bırakacak ama tam alanına bırakamıyor ufak bir ucundan dışarıda kalıyor çözümler neler olabilir hangi kod bloğunu düzeltmemiz gerekir açıklayınız.",
                     "Soru 3: 1. kabloyu bırakmak için bırakacağı alana geldi kolunu da açtığında tam alanda aslında cisimde bir sıkıntı yok ama kolu duvara sıkıştığı için tam yukarı kalkmıyor. Nasıl bir çözüm getirebilirdiniz? (Bu soruda satır seçmenize gerek yoktur).",
                     "Soru 4: 1. kabloyu bıraktı. Her şey güzel gidiyor. İkinci kabloyu almak için ilerliyor. Orada bir siyaha görünce dur var robot başka alanlarda siyaha görünce gayet güzel durabiliyor ama nedense burada ıskalıyor hangi kod bloğunu düzeltirdiniz?"
+                ],
+                kodBloklari: [
+                    { tip: "bg-event", html: "kablo, mikrofon ve müzik aletleri tanımla" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>10</span> cm git ve motor hızı <span class='input-field'>75</span>" },
+                    { tip: "bg-myblock", html: "beyazı görünce dur" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>45</span> derece sağa dön" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>20</span> cm git ve motor hızı <span class='input-field'>75</span>" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>88</span> derece sağa dön" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>15</span> cm git ve motor hızı <span class='input-field'>75</span>" },
+                    { tip: "bg-myblock", html: "siyah görünce dur" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>2</span> cm git ve motor hızı <span class='input-field'>-75</span>" },
+                    { tip: "bg-control", html: "<span class='input-field'>0.2</span> saniye bekle" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>2</span> derece sola dön" },
+                    { tip: "bg-myblock", html: "geri siyah görünce dur" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>-9</span> cm git ve motor hızı <span class='input-field'>60</span>" },
+                    { tip: "bg-motor", html: "C <span class='dropdown'>▼</span> hızı % <span class='input-field'>50</span> olarak ayarla" },
+                    { tip: "bg-motor", html: "C <span class='dropdown'>▼</span> <span class='dropdown'>Sola ▼</span> <span class='input-field'>0.8</span> <span class='dropdown'>saniye ▼</span> çalıştır <span class='comment'>// 1. Kabloyu aldı</span>" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>5</span> cm git ve motor hızı <span class='input-field'>80</span>" },
+                    { tip: "bg-myblock", html: "siyah görünce dur" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>4</span> cm git ve motor hızı <span class='input-field'>80</span>" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>-75</span> derece sola dön" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>46.5</span> cm git ve motor hızı <span class='input-field'>-80</span>" },
+                    { tip: "bg-motor", html: "C <span class='dropdown'>▼</span> hızı % <span class='input-field'>50</span> olarak ayarla" },
+                    { tip: "bg-motor", html: "C <span class='dropdown'>▼</span> <span class='dropdown'>Sağa ▼</span> <span class='input-field'>0.8</span> <span class='dropdown'>saniye ▼</span> çalıştır <span class='comment'>// 1. Kabloyu bıraktı</span>" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>8</span> cm git ve motor hızı <span class='input-field'>80</span>" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>-45</span> derece sağa dön" },
+                    { tip: "bg-myblock", html: "<span class='input-field'>49</span> cm git ve motor hızı <span class='input-field'>80</span>" },
+                    { tip: "bg-myblock", html: "siyah görünce dur" }
+                ]
+            },
+            {
+                id: "sinav4",
+                baslik: "Simülasyon 4: İkinci Aşama",
+                testAdi: "Dorduncu_Simulasyon",
+                kilitli: true,
+                sifre: "ba1234",
+                sorular: [
+                    "Soru 1: Bu simülasyonun soruları daha sonra eklenecektir. Test etmek için herhangi bir satır seçerek ilerleyebilirsiniz."
                 ],
                 kodBloklari: [
                     { tip: "bg-myblock", html: "siyah görünce dur" },
@@ -226,8 +270,21 @@
             SINAVLAR.forEach(sinav => {
                 const btn = document.createElement('button');
                 btn.className = 'exam-btn';
-                btn.innerText = sinav.baslik;
+                
+                let btnHtml = `<div class="title-row"><span>${sinav.baslik}</span></div>`;
+                if(sinav.kilitli) {
+                    btnHtml += `<div class="lock-note">🔒 Perşembe günü 3 ve 4 simülasyon açılacaktır.</div>`;
+                }
+                btn.innerHTML = btnHtml;
+
                 btn.onclick = () => {
+                    if(sinav.kilitli) {
+                        let pass = prompt("Bu simülasyon şifrelidir. Girmek için şifreyi yazınız:");
+                        if(pass !== sinav.sifre) {
+                            alert("Hatalı şifre girdiniz.");
+                            return;
+                        }
+                    }
                     if(checkAttempt(sinav.id)) selectExam(sinav);
                 };
                 listContainer.appendChild(btn);
@@ -263,7 +320,7 @@
                 div.innerHTML = blok.html;
                 div.onclick = function() {
                     selections[currentStep].lineNum = lineNum;
-                    selections[currentStep].text = this.innerText.split('//')[0].trim(); // Yorum kısmını satır metninden ayırır
+                    selections[currentStep].text = this.innerText.split('//')[0].trim(); 
                     updateHighlightDisplay();
                 };
                 codeList.appendChild(div);
@@ -333,6 +390,7 @@
                 testName: aktifSinav.testAdi,
                 qCount: totalSteps,
                 name: studentName,
+                questions: aktifSinav.sorular,
                 answers: answersData
             };
 

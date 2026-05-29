@@ -73,11 +73,11 @@
     <script>
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw--LXD5mFeFecAVbbG_bgDVqHUuoHARsidvDMKE5yczanIcvfCYwbCzvW8D-tZumfF/exec"; 
 
-        const SINAVLAR = [
+        const SIMULASYONLAR = [
             {
-                id: "sinav1",
+                id: "sim1",
                 baslik: "Simülasyon 1: Görev Başlangıcı",
-                testAdi: "Gorev_1_Sinavi",
+                testAdi: "Gorev_1_Simulasyonu",
                 kilitli: false,
                 sorular: [
                     "Soru 1: Robot başladı ve duvara doğru gidiyor. Hangi satırı düzeltebilirsiniz? Sorun ne olabilir?",
@@ -124,9 +124,9 @@
                 ]
             },
             {
-                id: "sinav2",
+                id: "sim2",
                 baslik: "Simülasyon 2: Kırmızı Nota",
-                testAdi: "Kirmizi_Nota_Sinavi",
+                testAdi: "Kirmizi_Nota_Simulasyonu",
                 kilitli: false,
                 sorular: [
                     "Soru 1: Kırmızı notayı almak için başladı ama 'siyahı görünce dur' için taramaya başladı ama durmadan dümdüz gidiyor. Sorun hangi satırda, ne yaparsın?",
@@ -160,11 +160,10 @@
                 ]
             },
             {
-                id: "sinav3",
+                id: "sim3",
                 baslik: "Simülasyon 3: 1. Kablo",
-                testAdi: "Birinci_Kablo_Sinavi",
-                kilitli: true,
-                sifre: "ba1234",
+                testAdi: "Birinci_Kablo_Simulasyonu",
+                kilitli: false,
                 sorular: [
                     "Soru 1: 1. kabloya robot almak için yaklaştı. Kolunu kapattığında ıskalıyor. Kod bloğunda nereye düzeltirsiniz açıklayınız.",
                     "Soru 2: 1. kabloyu aldı yerine bırakacak ama tam alanına bırakamıyor ufak bir ucundan dışarıda kalıyor çözümler neler olabilir hangi kod bloğunu düzeltmemiz gerekir açıklayınız.",
@@ -201,11 +200,10 @@
                 ]
             },
             {
-                id: "sinav4",
+                id: "sim4",
                 baslik: "Simülasyon 4: 2. Kablo ve Mikrofon",
                 testAdi: "Dorduncu_Simulasyon",
-                kilitli: true,
-                sifre: "ba1234",
+                kilitli: false,
                 sorular: [
                     "Soru 1: İkinci kabloyu alırken siyahı görünce dur kısmını yapmıyor, taramaya devam edip karşıya (birinci kabloya doğru) gidiyor. Bu sorunu nasıl çözersiniz ve hangi bloğu düzeltmeniz gerekir?",
                     "Soru 2: İkinci kabloyu aldıktan sonra dönüşünü yapıp mikrofona doğru giderken aşırı yaklaşıyor. Bu sorunu nasıl çözersiniz ve hangi satırı düzelteceksiniz?",
@@ -264,7 +262,7 @@
             return true;
         }
 
-        let aktifSinav = null;
+        let aktifSimulasyon = null;
         let studentName = "";
         let currentStep = 1;
         let totalSteps = 0;
@@ -272,25 +270,25 @@
 
         window.onload = function() {
             const listContainer = document.getElementById('examListContainer');
-            SINAVLAR.forEach(sinav => {
+            SIMULASYONLAR.forEach(simulasyon => {
                 const btn = document.createElement('button');
                 btn.className = 'exam-btn';
                 
-                let btnHtml = `<div class="title-row"><span>${sinav.baslik}</span></div>`;
-                if(sinav.kilitli) {
-                    btnHtml += `<div class="lock-note">🔒 Cuma günü 3 ve 4. simülasyonlar açılacaktır.</div>`;
+                let btnHtml = `<div class="title-row"><span>${simulasyon.baslik}</span></div>`;
+                if(simulasyon.kilitli) {
+                    btnHtml += `<div class="lock-note">🔒 Bu simülasyon şu an kilitlidir.</div>`;
                 }
                 btn.innerHTML = btnHtml;
 
                 btn.onclick = () => {
-                    if(sinav.kilitli) {
+                    if(simulasyon.kilitli) {
                         let pass = prompt("Bu simülasyon şifrelidir. Girmek için şifreyi yazınız:");
-                        if(pass !== sinav.sifre) {
+                        if(pass !== simulasyon.sifre) {
                             alert("Hatalı şifre girdiniz.");
                             return;
                         }
                     }
-                    if(checkAttempt(sinav.id)) selectExam(sinav);
+                    if(checkAttempt(simulasyon.id)) selectSimulasyon(simulasyon);
                 };
                 listContainer.appendChild(btn);
             });
@@ -304,20 +302,20 @@
             document.getElementById('studentName').value = "";
         }
 
-        function selectExam(sinavObj) {
-            aktifSinav = sinavObj;
-            totalSteps = aktifSinav.sorular.length;
+        function selectSimulasyon(simulasyonObj) {
+            aktifSimulasyon = simulasyonObj;
+            totalSteps = aktifSimulasyon.sorular.length;
             selections = {};
             for(let i = 1; i <= totalSteps; i++) { selections[i] = { lineNum: null, text: "", answer: "" }; }
             currentStep = 1;
 
-            document.getElementById('testTitleSetup').innerText = aktifSinav.baslik;
+            document.getElementById('testTitleSetup').innerText = aktifSimulasyon.baslik;
             document.getElementById('menuScreen').classList.add('hidden');
             document.getElementById('setupScreen').classList.remove('hidden');
             
             const codeList = document.getElementById('codeList');
             codeList.innerHTML = '';
-            aktifSinav.kodBloklari.forEach((blok, index) => {
+            aktifSimulasyon.kodBloklari.forEach((blok, index) => {
                 const lineNum = index + 1;
                 const div = document.createElement('div');
                 div.className = `code-line ${blok.tip}`;
@@ -338,17 +336,17 @@
             studentName = nameInput;
             document.getElementById('setupScreen').classList.add('hidden');
             document.getElementById('examScreen').classList.remove('hidden');
-            document.getElementById('welcomeText').innerText = "Öğrenci: " + studentName + " | " + aktifSinav.baslik;
+            document.getElementById('welcomeText').innerText = "Öğrenci: " + studentName + " | " + aktifSimulasyon.baslik;
             renderQuestion();
         }
 
         function isLineSelectionRequired(stepIndex) {
-            return !aktifSinav.sorular[stepIndex - 1].toLowerCase().includes("satır seçmenize gerek yoktur");
+            return !aktifSimulasyon.sorular[stepIndex - 1].toLowerCase().includes("satır seçmenize gerek yoktur");
         }
 
         function renderQuestion() {
             document.getElementById('questionProgress').innerText = `Soru ${currentStep} / ${totalSteps}`;
-            document.getElementById('questionText').innerText = aktifSinav.sorular[currentStep - 1];
+            document.getElementById('questionText').innerText = aktifSimulasyon.sorular[currentStep - 1];
             document.getElementById('answerText').value = selections[currentStep].answer;
             updateHighlightDisplay();
             document.getElementById('btnPrev').disabled = (currentStep === 1);
@@ -392,10 +390,10 @@
             }
 
             const payload = {
-                testName: aktifSinav.testAdi,
+                testName: aktifSimulasyon.testAdi,
                 qCount: totalSteps,
                 name: studentName,
-                questions: aktifSinav.sorular,
+                questions: aktifSimulasyon.sorular,
                 answers: answersData
             };
 
@@ -407,14 +405,14 @@
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify(payload)
             }).then(() => {
-                localStorage.setItem('done_' + aktifSinav.id, 'true');
+                localStorage.setItem('done_' + aktifSimulasyon.id, 'true');
                 document.getElementById('examScreen').classList.add('hidden');
                 document.getElementById('successScreen').classList.remove('hidden');
-                document.getElementById('btnSubmit').innerText = "Sınavı Bitir";
+                document.getElementById('btnSubmit').innerText = "Simülasyonu Bitir";
                 document.getElementById('btnSubmit').disabled = false;
             }).catch(err => {
                 alert("Veri gönderilirken bir hata oluştu: " + err);
-                document.getElementById('btnSubmit').innerText = "Sınavı Bitir";
+                document.getElementById('btnSubmit').innerText = "Simülasyonu Bitir";
                 document.getElementById('btnSubmit').disabled = false;
             });
         }
@@ -435,13 +433,13 @@
         <button class="back-btn" onclick="showMenu()" style="float: left;">⮜ Menüye Dön</button>
         <div style="clear: both;"></div>
         <img src="https://wro-association.org/wp-content/uploads/2021/08/logo-with-wordmark.png" alt="WRO Logo" class="header-logo">
-        <h2 id="testTitleSetup">Sınav Adı</h2>
-        <p>Sınava başlamadan önce lütfen adınızı ve soyadınızı giriniz.</p>
+        <h2 id="testTitleSetup">Simülasyon Adı</h2>
+        <p>Simülasyona başlamadan önce lütfen adınızı ve soyadınızı giriniz.</p>
         <div style="text-align: left; max-width: 400px; margin: 0 auto;">
             <label for="studentName"><b>Ad Soyad:</b></label>
             <input type="text" id="studentName" placeholder="Örn. Ahmet Yılmaz" required>
         </div>
-        <button class="action-btn" onclick="startExam()" style="margin-top: 15px;">Sınava Başla</button>
+        <button class="action-btn" onclick="startExam()" style="margin-top: 15px;">Simülasyona Başla</button>
     </div>
 
     <div id="examScreen" class="exam-screen hidden">
@@ -467,7 +465,7 @@
                     <div class="nav-buttons">
                         <button id="btnPrev" class="action-btn btn-secondary" onclick="prevQuestion()" disabled>Geri</button>
                         <button id="btnNext" class="action-btn" onclick="nextQuestion()">İleri</button>
-                        <button id="btnSubmit" class="action-btn hidden" onclick="submitExam()" style="background-color: #28a745;">Sınavı Bitir</button>
+                        <button id="btnSubmit" class="action-btn hidden" onclick="submitExam()" style="background-color: #28a745;">Simülasyonu Bitir</button>
                     </div>
                 </div>
             </div>
@@ -476,7 +474,7 @@
 
     <div id="successScreen" class="success-screen hidden" style="text-align: center;">
         <img src="https://wro-association.org/wp-content/uploads/2021/08/logo-with-wordmark.png" alt="WRO Logo" style="max-height: 80px; margin-bottom: 20px;">
-        <h2>Sınav Tamamlandı!</h2>
+        <h2>Simülasyon Tamamlandı!</h2>
         <p>Cevapların başarıyla kaydedildi ve değerlendirilmek üzere koçuna gönderildi.</p>
         <button class="action-btn" onclick="showMenu()" style="margin-top: 20px;">Ana Menüye Dön</button>
     </div>
